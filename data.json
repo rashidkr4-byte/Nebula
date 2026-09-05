@@ -1,0 +1,32 @@
+{
+  "site": {
+    "name": "Nebula",
+    "tagline": "The Ultimate Discord Bot Platform",
+    "discordInvite": "https://discord.gg/yourinvite"
+  },
+  "navigation": [
+    { "label": "All", "category": "all", "active": true },
+    { "label": "Bots", "category": "bots", "active": false },
+    { "label": "Website", "category": "website", "active": false }
+  ],
+  "items": [
+    {
+      "title": "Nebula Guard",
+      "category": "bots",
+      "description": "Advanced automated moderation, anti-raid, and security for your server.",
+      "badge": "Popular Bot"
+    },
+    {
+      "title": "Nebula Economy",
+      "category": "bots",
+      "description": "Engage your community with custom currencies, global shops, and minigames.",
+      "badge": "New Bot"
+    },
+    {
+      "title": "Nebula Web Dashboard",
+      "category": "website",
+      "description": "Full-featured online control panel to configure settings and build custom embeds.",
+      "badge": "Tool"
+    }
+  ]
+}
