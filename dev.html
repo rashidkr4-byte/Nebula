@@ -142,12 +142,8 @@
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
-            console.log("Loading developers script...");
             const grid = document.getElementById('developers-grid');
-            if (!grid) {
-                console.error("Error: developers-grid element not found!");
-                return;
-            }
+            if (!grid) return;
 
             grid.innerHTML = '';
             developers.forEach(dev => {
@@ -156,7 +152,7 @@
                         <div class="discord-banner" style="background: ${dev.bannerColor};"></div>
                         <div class="discord-profile-body">
                             <div class="discord-avatar-container">
-                                <img src="${dev.avatar}" alt="${dev.name}" class="discord-avatar" onerror="this.src='nebula.png'">
+                                <img src="./${dev.avatar}" alt="${dev.name}" class="discord-avatar" onerror="console.error('Failed to load image:', '${dev.avatar}'); this.onerror=null; this.src='nebula.png';">
                                 <div class="discord-status-dot"></div>
                             </div>
                             <div class="discord-username">${dev.name}</div>
@@ -170,7 +166,14 @@
                     </div>
                 `;
             });
-            console.log("Developers rendered successfully!");
+
+            const session = JSON.parse(localStorage.getItem('nebula_session'));
+            const authContainer = document.getElementById('nav-auth-buttons');
+            if (authContainer) {
+                authContainer.innerHTML = session ? 
+                    `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.85rem; padding:6px 14px;">Logout</button>` :
+                    `<a href="index.html" class="btn-green" style="font-size:0.85rem; padding:6px 14px; text-decoration:none;">Login / Register</a>`;
+            }
         });
     </script>
 </body>
