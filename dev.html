@@ -141,18 +141,18 @@
             }
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('developers-grid');
             if (!grid) return;
 
-            grid.innerHTML = '';
+            let htmlContent = '';
             developers.forEach(dev => {
-                grid.innerHTML += `
+                htmlContent += `
                     <div class="discord-card">
                         <div class="discord-banner" style="background: ${dev.bannerColor};"></div>
                         <div class="discord-profile-body">
                             <div class="discord-avatar-container">
-                                <img src="./${dev.avatar}" alt="${dev.name}" class="discord-avatar" onerror="console.error('Failed to load image:', '${dev.avatar}'); this.onerror=null; this.src='nebula.png';">
+                                <img src="${dev.avatar}" alt="${dev.name}" class="discord-avatar" onerror="this.src='nebula.png'">
                                 <div class="discord-status-dot"></div>
                             </div>
                             <div class="discord-username">${dev.name}</div>
@@ -166,6 +166,7 @@
                     </div>
                 `;
             });
+            grid.innerHTML = htmlContent;
 
             const session = JSON.parse(localStorage.getItem('nebula_session'));
             const authContainer = document.getElementById('nav-auth-buttons');
