@@ -5,11 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developers — Nebula</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Discord Profile Card Specific Styling */
+        .discord-card {
+            background-color: #111214;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            border: 1px solid #222327;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .discord-banner {
+            height: 100px;
+            width: 100%;
+            background: linear-gradient(135deg, #5865F2, #eb459e);
+        }
+        .discord-profile-body {
+            padding: 0 16px 16px 16px;
+            position: relative;
+            margin-top: -40px;
+        }
+        .discord-avatar-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 12px;
+        }
+        .discord-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 6px solid #111214;
+            object-fit: cover;
+            background-color: #2b2d31;
+        }
+        .discord-status-dot {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            width: 16px;
+            height: 16px;
+            background-color: #23a55a; /* Online green */
+            border: 3px solid #111214;
+            border-radius: 50%;
+        }
+        .discord-username {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f2f3f5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .discord-handle {
+            font-size: 0.85rem;
+            color: #949ba4;
+            margin-bottom: 12px;
+        }
+        .discord-badges {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .discord-badge {
+            background: #2b2d31;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #dbdee1;
+            font-weight: 600;
+        }
+        .discord-bio {
+            background: #2b2d31;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #dbdee1;
+            line-height: 1.4;
+            white-space: pre-line;
+            border-left: 4px solid #5865F2;
+        }
+    </style>
 </head>
 <body>
     <div class="bg-glow"></div>
     <header class="navbar">
-        <div class="nav-left"><a href="index.html" class="logo">Nebula</a></div>
+        <div class="nav-left">
+            <a href="index.html" class="logo"><img src="nebula.png" alt="Nebula Logo"></a>
+        </div>
         <nav class="nav-center">
             <a href="index.html" class="nav-tab">Home</a>
             <a href="bots.html" class="nav-tab">Bots</a>
@@ -23,54 +108,80 @@
         <div class="nav-right" id="nav-auth-buttons"></div>
     </header>
 
-    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
-        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Development Team</h1>
-        <p style="color: var(--text-muted); margin-bottom: 32px;">Meet the creators, founders, and maintainers behind Nebula.</p>
+    <main style="max-width: 1100px; margin: 50px auto; padding: 0 24px;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800;">Development Team</h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 40px;">Meet the creators, founders, and maintainers behind Nebula.</p>
 
-        <div id="dev-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;"></div>
+        <div id="developers-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;"></div>
     </main>
 
     <script>
-        async function initDevs() {
-            let data = JSON.parse(localStorage.getItem('nebula_data'));
-            if (!data) { 
-                try {
-                    const res = await fetch('data.json'); 
-                    data = await res.json(); 
-                    localStorage.setItem('nebula_data', JSON.stringify(data)); 
-                } catch(e) {
-                    data = {
-                        developers: [
-                            { name: "Entothic", role: "Founder & Network Owner", username: "entothicx", bio: "Founder of Static Club, Peak Tiers, and Nebula Ai." },
-                            { name: ".Voxion", role: "Head Developer / Co-Owner", username: "viperblade0293", bio: "Undrated Developer & staff / admin specializing in Discord, Minecraft, bots, and plugins." },
-                            { name: "Muhammed Rashid", role: "Lead Developer", username: "rashid", bio: "Core system architect and maintainer." }
-                        ]
-                    };
-                }
+        const developers = [
+            {
+                name: "Entothic",
+                handle: "entothicx",
+                role: "Founder & Network Owner",
+                bio: "Founder Of Nebula AI\nNetwork Owner\n# Best Bot Dev...\n🛡️ Active & Managing All Bots",
+                avatar: "entothic.png",
+                bannerColor: "linear-gradient(135deg, #23a55a, #5865F2)",
+                badge: "OWNER"
+            },
+            {
+                name: ".Voxion | <>",
+                handle: "viperblaze0293",
+                role: "Head Dev & Co-Owner",
+                bio: "°•° Voxion | Dev °•°\nUnderrated Developer\nUnderrated Staff / Admin\nPushing through every obstacle.",
+                avatar: "voxion.png",
+                bannerColor: "linear-gradient(135deg, #5865F2, #3ba55c)",
+                badge: "CO-OWNER"
+            },
+            {
+                name: "Exe.",
+                handle: "curated_.",
+                role: "Network Overseer & Hosting Manager",
+                bio: "Best Bot Dev ! | Best Web Dev !\nWorks:\n- Nitro Tool & Gen\n- Steam Tool & Gen",
+                avatar: "exe.png",
+                bannerColor: "linear-gradient(135deg, #faa61a, #ed4245)",
+                badge: "MANAGER"
             }
+        ];
 
-            const grid = document.getElementById('dev-grid');
+        function loadDevelopers() {
+            const grid = document.getElementById('developers-grid');
+            if (!grid) return;
             grid.innerHTML = '';
-            
-            const devs = data.developers || [];
 
-            devs.forEach(dev => {
+            developers.forEach(dev => {
                 grid.innerHTML += `
-                    <div class="card">
-                        <span class="card-badge">${dev.role || 'Developer'}</span>
-                        <h3 style="font-size: 1.25rem; margin-bottom: 4px;">${dev.name}</h3>
-                        <p style="color: var(--accent-green); font-size: 0.85rem; margin-bottom: 12px; font-family: monospace;">@${dev.username}</p>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">${dev.bio}</p>
+                    <div class="discord-card">
+                        <div class="discord-banner" style="background: ${dev.bannerColor};"></div>
+                        <div class="discord-profile-body">
+                            <div class="discord-avatar-container">
+                                <img src="${dev.avatar}" alt="${dev.name}" class="discord-avatar" onerror="this.src='nebula.png'">
+                                <div class="discord-status-dot"></div>
+                            </div>
+                            <div class="discord-username">${dev.name}</div>
+                            <div class="discord-handle">@${dev.handle}</div>
+                            <div class="discord-badges">
+                                <span class="discord-badge">${dev.badge}</span>
+                                <span class="discord-badge" style="color: var(--accent-green);">${dev.role}</span>
+                            </div>
+                            <div class="discord-bio">${dev.bio}</div>
+                        </div>
                     </div>
                 `;
             });
 
             const session = JSON.parse(localStorage.getItem('nebula_session'));
-            document.getElementById('nav-auth-buttons').innerHTML = session ? 
-                `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.8rem; padding:6px 12px;">Logout</button>` :
-                `<a href="index.html" class="btn-green" style="font-size:0.8rem; padding:6px 12px; text-decoration:none;">Login / Register</a>`;
+            const authContainer = document.getElementById('nav-auth-buttons');
+            if (authContainer) {
+                authContainer.innerHTML = session ? 
+                    `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.85rem; padding:6px 14px;">Logout</button>` :
+                    `<a href="index.html" class="btn-green" style="font-size:0.85rem; padding:6px 14px; text-decoration:none;">Login / Register</a>`;
+            }
         }
-        initDevs();
+
+        loadDevelopers();
     </script>
 </body>
 </html>
