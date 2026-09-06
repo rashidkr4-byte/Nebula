@@ -6,7 +6,6 @@
     <title>Developers — Nebula</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Discord Profile Card Specific Styling */
         .discord-card {
             background-color: #111214;
             border-radius: 12px;
@@ -15,12 +14,10 @@
             border: 1px solid #222327;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
         .discord-banner {
             height: 100px;
             width: 100%;
-            background: linear-gradient(135deg, #5865F2, #eb459e);
         }
         .discord-profile-body {
             padding: 0 16px 16px 16px;
@@ -47,7 +44,7 @@
             right: 6px;
             width: 16px;
             height: 16px;
-            background-color: #23a55a; /* Online green */
+            background-color: #23a55a;
             border: 3px solid #111214;
             border-radius: 50%;
         }
@@ -55,9 +52,6 @@
             font-size: 1.25rem;
             font-weight: 700;
             color: #f2f3f5;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .discord-handle {
             font-size: 0.85rem;
@@ -68,6 +62,7 @@
             display: flex;
             gap: 6px;
             margin-bottom: 12px;
+            flex-wrap: wrap;
         }
         .discord-badge {
             background: #2b2d31;
@@ -109,8 +104,8 @@
     </header>
 
     <main style="max-width: 1100px; margin: 50px auto; padding: 0 24px;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800;">Development Team</h1>
-        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 40px;">Meet the creators, founders, and maintainers behind Nebula.</p>
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; color: #fff;">Development Team</h1>
+        <p style="color: #949ba4; font-size: 1.05rem; margin-bottom: 40px;">Meet the creators, founders, and maintainers behind Nebula.</p>
 
         <div id="developers-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;"></div>
     </main>
@@ -146,11 +141,15 @@
             }
         ];
 
-        function loadDevelopers() {
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("Loading developers script...");
             const grid = document.getElementById('developers-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
+            if (!grid) {
+                console.error("Error: developers-grid element not found!");
+                return;
+            }
 
+            grid.innerHTML = '';
             developers.forEach(dev => {
                 grid.innerHTML += `
                     <div class="discord-card">
@@ -164,24 +163,15 @@
                             <div class="discord-handle">@${dev.handle}</div>
                             <div class="discord-badges">
                                 <span class="discord-badge">${dev.badge}</span>
-                                <span class="discord-badge" style="color: var(--accent-green);">${dev.role}</span>
+                                <span class="discord-badge" style="color: #23a55a;">${dev.role}</span>
                             </div>
                             <div class="discord-bio">${dev.bio}</div>
                         </div>
                     </div>
                 `;
             });
-
-            const session = JSON.parse(localStorage.getItem('nebula_session'));
-            const authContainer = document.getElementById('nav-auth-buttons');
-            if (authContainer) {
-                authContainer.innerHTML = session ? 
-                    `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.85rem; padding:6px 14px;">Logout</button>` :
-                    `<a href="index.html" class="btn-green" style="font-size:0.85rem; padding:6px 14px; text-decoration:none;">Login / Register</a>`;
-            }
-        }
-
-        loadDevelopers();
+            console.log("Developers rendered successfully!");
+        });
     </script>
 </body>
 </html>
