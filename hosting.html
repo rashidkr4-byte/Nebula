@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hosting — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left"><a href="index.html" class="logo">Nebula</a></div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab">Bots</a>
+            <a href="tools.html" class="nav-tab">Tools</a>
+            <a href="hosting.html" class="nav-tab active">Hosting</a>
+            <a href="store.html" class="nav-tab">Store</a>
+            <a href="api-keys.html" class="nav-tab">API Keys</a>
+            <a href="dev.html" class="nav-tab">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" id="nav-auth-buttons"></div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Cloud Hosting Nodes</h1>
+        <p style="color: var(--text-muted); margin-bottom: 32px;">High-performance, 24/7 reliable servers for your bots and apps.</p>
+        
+        <div id="hosting-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;"></div>
+    </main>
+
+    <script>
+        async function initHosting() {
+            let data = JSON.parse(localStorage.getItem('nebula_data'));
+            if (!data) { const res = await fetch('data.json'); data = await res.json(); localStorage.setItem('nebula_data', JSON.stringify(data)); }
+
+            const grid = document.getElementById('hosting-grid');
+            grid.innerHTML = '';
+            if(data.hosting) {
+                data.hosting.forEach(node => {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <span class="card-badge">${node.badge}</span>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 6px;">${node.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">${node.specs}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 700; color: var(--accent-green);">$${node.price} /mo</span>
+                                <a href="${node.purchaseUrl}" target="_blank" class="btn-green" style="font-size: 0.85rem; padding: 6px 14px; text-decoration:none;">Deploy Node</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            const session = JSON.parse(localStorage.getItem('nebula_session'));
+            document.getElementById('nav-auth-buttons').innerHTML = session ? 
+                `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.8rem; padding:6px 12px;">Logout</button>` :
+                `<a href="index.html" class="btn-green" style="font-size:0.8rem; padding:6px 12px; text-decoration:none;">Login / Register</a>`;
+        }
+        initHosting();
+    </script>
+</body>
+</html>

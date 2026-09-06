@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bots — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo"><img src="nebula.png" alt="Nebula Logo"></a>
+        </div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab active">Bots</a>
+            <a href="tools.html" class="nav-tab">Tools</a>
+            <a href="hosting.html" class="nav-tab">Hosting</a>
+            <a href="store.html" class="nav-tab">Store</a>
+            <a href="api-keys.html" class="nav-tab">API Keys</a>
+            <a href="dev.html" class="nav-tab">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" id="nav-auth-buttons"></div>
+    </header>
+
+    <main style="max-width: 1100px; margin: 50px auto; padding: 0 24px;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800;">Nebula Bot Ecosystem</h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 40px;">Invite our powerful suite of AI, audio, and utility bots directly into your Discord servers.</p>
+
+        <div id="bots-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;"></div>
+    </main>
+
+    <script>
+        const botsList = [
+            { 
+                title: "Nebula Ai", 
+                badge: "AI BOT", 
+                description: "Fully powered by AI and custom trained for your workflow and automated tasks.", 
+                inviteUrl: "https://discord.com/oauth2/authorize?client_id=1538126597595332618&permissions=8&integration_type=0&scope=bot+applications.commands" 
+            },
+            { 
+                title: "Vedha", 
+                badge: "AUDIO & AMP", 
+                description: "Self-amplifier bot equipped with high-fidelity music streaming and audio management tools.", 
+                inviteUrl: "https://discord.com/oauth2/authorize?client_id=1545701800076775483&permissions=8&integration_type=0&scope=bot+applications.commands" 
+            },
+            { 
+                title: "Ticket.in", 
+                badge: "SUPPORT", 
+                description: "Fully customisable advanced ticket system built for high-scale community support handling.", 
+                inviteUrl: "https://discord.com/oauth2/authorize?client_id=1530854097983639593&permissions=8&integration_type=0&scope=bot+applications.commands" 
+            },
+            { 
+                title: "Nebula Core", 
+                badge: "CORE SYSTEM", 
+                description: "Core administrative backbone bot for tracking server analytics, moderation, and logs.", 
+                inviteUrl: "https://discord.com/oauth2/authorize?client_id=1537822719020761097&permissions=8&integration_type=0&scope=bot+applications.commands" 
+            }
+        ];
+
+        function loadBotsPage() {
+            const grid = document.getElementById('bots-grid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+
+            botsList.forEach(bot => {
+                grid.innerHTML += `
+                    <div class="card" style="padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span class="card-badge">${bot.badge}</span>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${bot.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.5;">${bot.description}</p>
+                        </div>
+                        <a href="${bot.inviteUrl}" target="_blank" rel="noopener noreferrer" class="btn-green" style="text-align: center; text-decoration: none; padding: 10px; font-size: 0.85rem; font-weight: 600;">Add Bot</a>
+                    </div>
+                `;
+            });
+
+            const session = JSON.parse(localStorage.getItem('nebula_session'));
+            const authContainer = document.getElementById('nav-auth-buttons');
+            if (authContainer) {
+                authContainer.innerHTML = session ? 
+                    `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.85rem; padding:6px 14px;">Logout</button>` :
+                    `<a href="index.html" class="btn-green" style="font-size:0.85rem; padding:6px 14px; text-decoration:none;">Login / Register</a>`;
+            }
+        }
+
+        loadBotsPage();
+    </script>
+</body>
+</html>

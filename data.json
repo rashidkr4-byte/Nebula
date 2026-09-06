@@ -1,32 +1,97 @@
 {
   "site": {
     "name": "Nebula",
-    "tagline": "The Ultimate Discord Bot Platform",
-    "discordInvite": "https://discord.gg/yourinvite"
+    "currencyRates": { "USD": 1, "INR": 83, "EUR": 0.92, "GBP": 0.78 },
+    "currencySymbols": { "USD": "$", "INR": "₹", "EUR": "€", "GBP": "£" }
   },
-  "navigation": [
-    { "label": "All", "category": "all", "active": true },
-    { "label": "Bots", "category": "bots", "active": false },
-    { "label": "Website", "category": "website", "active": false }
+  "ecosystem": [
+    { 
+      "title": "AI & Utility Bots", 
+      "badge": "ECOSYSTEM", 
+      "description": "Equipped with advanced modules like Nebula Ai, Vedha, and core infrastructure tools.", 
+      "link": "bots.html", 
+      "linkText": "Explore Bots" 
+    },
+    { 
+      "title": "NVMe Cloud Nodes", 
+      "badge": "INFRASTRUCTURE", 
+      "description": "Blazing fast dedicated resources with up to 16GB RAM and high-frequency vCPU cores.", 
+      "link": "hosting.html", 
+      "linkText": "View Hosting" 
+    },
+    { 
+      "title": "Discord Hubs", 
+      "badge": "COMMUNITY", 
+      "description": "Join active developer communities, open priority support tickets, and manage cloud billing.", 
+      "link": "discord.html", 
+      "linkText": "Join Hubs" 
+    }
   ],
-  "items": [
-    {
-      "title": "Nebula Guard",
-      "category": "bots",
-      "description": "Advanced automated moderation, anti-raid, and security for your server.",
-      "badge": "Popular Bot"
+  "bots": [
+    { 
+      "title": "Nebula Ai", 
+      "badge": "AI BOT", 
+      "description": "Fully powered by AI and custom trained for your workflow and automated tasks.", 
+      "premiumPrice": 2.30, 
+      "inviteUrl": "https://discord.com/oauth2/authorize?client_id=1538126597595332618&permissions=8&integration_type=0&scope=bot+applications.commands" 
     },
-    {
-      "title": "Nebula Economy",
-      "category": "bots",
-      "description": "Engage your community with custom currencies, global shops, and minigames.",
-      "badge": "New Bot"
+    { 
+      "title": "Vedha", 
+      "badge": "AUDIO & AMP", 
+      "description": "Self-amplifier bot equipped with high-fidelity music streaming and audio management tools.", 
+      "premiumPrice": 0.60, 
+      "inviteUrl": "https://discord.com/oauth2/authorize?client_id=1545701800076775483&permissions=8&integration_type=0&scope=bot+applications.commands" 
     },
-    {
-      "title": "Nebula Web Dashboard",
-      "category": "website",
-      "description": "Full-featured online control panel to configure settings and build custom embeds.",
-      "badge": "Tool"
+    { 
+      "title": "Ticket.in", 
+      "badge": "SUPPORT", 
+      "description": "Fully customisable advanced ticket system built for high-scale community support handling.", 
+      "premiumPrice": 1.20, 
+      "inviteUrl": "https://discord.com/oauth2/authorize?client_id=1530854097983639593&permissions=8&integration_type=0&scope=bot+applications.commands" 
+    },
+    { 
+      "title": "Nebula Core", 
+      "badge": "CORE SYSTEM", 
+      "description": "Core administrative backbone bot for tracking server analytics, moderation, and logs.", 
+      "premiumPrice": 1.50, 
+      "inviteUrl": "https://discord.com/oauth2/authorize?client_id=1537822719020761097&permissions=8&integration_type=0&scope=bot+applications.commands" 
+    },
+    { 
+      "title": "Custom Bot Service", 
+      "badge": "CUSTOM", 
+      "description": "Have your own custom bot built and tailored to your exact specifications. Join support to open a ticket.", 
+      "premiumPrice": 5.00, 
+      "inviteUrl": "https://discord.gg/my9aENSaNy" 
+    }
+  ],
+  "hosting": [
+    { 
+      "title": "Starter Node", 
+      "badge": "HOSTING PLAN", 
+      "specs": "1 vCPU Core • 2GB RAM • 20GB NVMe", 
+      "price": 3.50, 
+      "purchaseUrl": "https://discord.gg/UKFHCvh8rn" 
+    },
+    { 
+      "title": "Advanced Node", 
+      "badge": "HOSTING PLAN", 
+      "specs": "2 vCPU Cores • 4GB RAM • 50GB NVMe", 
+      "price": 7.00, 
+      "purchaseUrl": "https://discord.gg/UKFHCvh8rn" 
+    },
+    { 
+      "title": "Pro Server", 
+      "badge": "HOSTING PLAN", 
+      "specs": "4 vCPU Cores • 8GB RAM • 100GB NVMe", 
+      "price": 14.00, 
+      "purchaseUrl": "https://discord.gg/UKFHCvh8rn" 
+    },
+    { 
+      "title": "Extreme Server", 
+      "badge": "HOSTING PLAN", 
+      "specs": "6 vCPU Cores • 16GB RAM • 200GB NVMe", 
+      "price": 22.00, 
+      "purchaseUrl": "https://discord.gg/UKFHCvh8rn" 
     }
   ]
 }

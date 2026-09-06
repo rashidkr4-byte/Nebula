@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left"><a href="index.html" class="logo">Nebula</a></div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab">Bots</a>
+            <a href="tools.html" class="nav-tab active">Tools</a>
+            <a href="hosting.html" class="nav-tab">Hosting</a>
+            <a href="store.html" class="nav-tab">Store</a>
+            <a href="api-keys.html" class="nav-tab">API Keys</a>
+            <a href="dev.html" class="nav-tab">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" id="nav-auth-buttons"></div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Developer Tools</h1>
+        <p style="color: var(--text-muted); margin-bottom: 32px;">Utilities and development toolkits designed for smooth workflow integration.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div class="card">
+                <span class="card-badge">UTILITY</span>
+                <h3 style="font-size: 1.25rem; margin-bottom: 6px;">Webhook Tester</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Instantly send and inspect raw JSON webhooks to your discord channels.</p>
+                <button onclick="alert('Webhook Tool Ready!')" class="btn-green" style="font-size: 0.85rem; padding: 6px 14px;">Open Tool</button>
+            </div>
+            <div class="card">
+                <span class="card-badge">UTILITY</span>
+                <h3 style="font-size: 1.25rem; margin-bottom: 6px;">Embed Generator</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Build visual JSON embeds with live preview for bot messaging layouts.</p>
+                <button onclick="alert('Embed Tool Ready!')" class="btn-green" style="font-size: 0.85rem; padding: 6px 14px;">Open Tool</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const session = JSON.parse(localStorage.getItem('nebula_session'));
+        document.getElementById('nav-auth-buttons').innerHTML = session ? 
+            `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.8rem; padding:6px 12px;">Logout</button>` :
+            `<a href="index.html" class="btn-green" style="font-size:0.8rem; padding:6px 12px; text-decoration:none;">Login / Register</a>`;
+    </script>
+</body>
+</html>

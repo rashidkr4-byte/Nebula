@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left"><a href="index.html" class="logo">Nebula</a></div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab">Bots</a>
+            <a href="tools.html" class="nav-tab">Tools</a>
+            <a href="hosting.html" class="nav-tab">Hosting</a>
+            <a href="store.html" class="nav-tab">Store</a>
+            <a href="api-keys.html" class="nav-tab">API Keys</a>
+            <a href="dev.html" class="nav-tab active">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" id="nav-auth-buttons"></div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Development Team</h1>
+        <p style="color: var(--text-muted); margin-bottom: 32px;">Meet the creators, founders, and maintainers behind Nebula.</p>
+
+        <div id="dev-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;"></div>
+    </main>
+
+    <script>
+        async function initDevs() {
+            let data = JSON.parse(localStorage.getItem('nebula_data'));
+            if (!data) { 
+                try {
+                    const res = await fetch('data.json'); 
+                    data = await res.json(); 
+                    localStorage.setItem('nebula_data', JSON.stringify(data)); 
+                } catch(e) {
+                    data = {
+                        developers: [
+                            { name: "Entothic", role: "Founder & Network Owner", username: "entothicx", bio: "Founder of Static Club, Peak Tiers, and Nebula Ai." },
+                            { name: ".Voxion", role: "Head Developer / Co-Owner", username: "viperblade0293", bio: "Undrated Developer & staff / admin specializing in Discord, Minecraft, bots, and plugins." },
+                            { name: "Muhammed Rashid", role: "Lead Developer", username: "rashid", bio: "Core system architect and maintainer." }
+                        ]
+                    };
+                }
+            }
+
+            const grid = document.getElementById('dev-grid');
+            grid.innerHTML = '';
+            
+            const devs = data.developers || [];
+
+            devs.forEach(dev => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <span class="card-badge">${dev.role || 'Developer'}</span>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 4px;">${dev.name}</h3>
+                        <p style="color: var(--accent-green); font-size: 0.85rem; margin-bottom: 12px; font-family: monospace;">@${dev.username}</p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">${dev.bio}</p>
+                    </div>
+                `;
+            });
+
+            const session = JSON.parse(localStorage.getItem('nebula_session'));
+            document.getElementById('nav-auth-buttons').innerHTML = session ? 
+                `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.8rem; padding:6px 12px;">Logout</button>` :
+                `<a href="index.html" class="btn-green" style="font-size:0.8rem; padding:6px 12px; text-decoration:none;">Login / Register</a>`;
+        }
+        initDevs();
+    </script>
+</body>
+</html>

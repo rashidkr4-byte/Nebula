@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bots Catalog — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo" style="text-decoration:none;">Nebula Bots</a>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="btn-outline">Back to Home</a>
+        </div>
+    </header>
+
+    <main class="catalog-section" style="margin-top: 40px;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Explore Platform Bots</h1>
+        <p style="color: var(--text-muted); margin-bottom: 32px;">Discover high-performance utility bots and management extensions.</p>
+        <div class="catalog-container" id="cards-container"></div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                const container = document.getElementById('cards-container');
+                
+                data.items.forEach(item => {
+                    const card = document.createElement('a');
+                    card.href = `bot.html?id=${item.id}`;
+                    card.className = 'card';
+                    card.style.textDecoration = 'none';
+                    card.style.display = 'block';
+                    card.innerHTML = `
+                        <span class="card-badge">${item.badge}</span>
+                        <h3 style="color: var(--text-main);">${item.title}</h3>
+                        <p>${item.description}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>

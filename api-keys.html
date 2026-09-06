@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Keys — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo"><img src="nebula.png" alt="Nebula Logo"></a>
+        </div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab">Bots</a>
+            <a href="tools.html" class="nav-tab">Tools</a>
+            <a href="hosting.html" class="nav-tab">Hosting</a>
+            <a href="store.html" class="nav-tab">Store</a>
+            <a href="api-keys.html" class="nav-tab active">API Keys</a>
+            <a href="dev.html" class="nav-tab">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" id="nav-auth-buttons"></div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+                <h1 style="font-size: 2rem; margin-bottom: 4px;">API Keys</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Manage your secret keys for programmatic access to Nebula services.</p>
+            </div>
+            <button onclick="openCreateModal()" class="btn-green" style="font-size: 0.85rem;">+ Create API Key</button>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 2fr 3fr 1.5fr 1.5fr 1.5fr 1.5fr; padding: 14px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                <span>Name</span>
+                <span>Secret Key</span>
+                <span>Created</span>
+                <span>Last Used</span>
+                <span>Expires</span>
+                <span>Usage (24hrs)</span>
+            </div>
+            <div id="keys-list"></div>
+        </div>
+    </main>
+
+    <!-- Create Modal -->
+    <div id="create-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="card" style="width: 480px; max-width: 90%; background: #0f131a; border: 1px solid var(--border-color); position: relative;">
+            <button onclick="closeCreateModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">✕</button>
+            <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Create API Key</h3>
+            
+            <label style="display: block; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">Display Name</label>
+            <input type="text" id="key-name-input" placeholder="e.g. Production API Key" style="width: 100%; background: #07090e; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; color: white; font-size: 0.9rem; margin-bottom: 6px;">
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 16px;">A display name for the key. Maximum 50 characters.</p>
+
+            <label style="display: block; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">Expiration</label>
+            <select id="key-expiration" style="width: 100%; background: #07090e; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; color: white; font-size: 0.9rem; margin-bottom: 6px;">
+                <option value="Never">No expiration</option>
+                <option value="30 Days">30 Days</option>
+                <option value="90 Days">90 Days</option>
+            </select>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 24px;">This key will not expire.</p>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button onclick="closeCreateModal()" class="btn-outline" style="font-size: 0.85rem; padding: 8px 16px;">Cancel</button>
+                <button onclick="generateKey()" class="btn-green" style="font-size: 0.85rem; padding: 8px 16px;">Create Key</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1001; align-items: center; justify-content: center;">
+        <div class="card" style="width: 520px; max-width: 90%; background: #0f131a; border: 1px solid var(--border-color); position: relative;">
+            <button onclick="closeSuccessModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">✕</button>
+            <h3 style="font-size: 1.25rem; margin-bottom: 12px;">Create API Key</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Your new API key has been created. <strong style="color: var(--text-main);">Copy it now, as we will not display it again.</strong></p>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                <input type="text" id="revealed-key-box" readonly style="flex: 1; background: #07090e; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; color: var(--accent-green); font-family: monospace; font-size: 0.85rem;">
+                <button onclick="copyKeyValue()" class="btn-outline" style="font-size: 0.85rem; padding: 8px 16px;">Copy</button>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button onclick="closeSuccessModal()" class="btn-green" style="font-size: 0.85rem; padding: 8px 16px;">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKeys = JSON.parse(localStorage.getItem('nebula_api_keys')) || [];
+
+        function renderKeys() {
+            const list = document.getElementById('keys-list');
+            if (apiKeys.length === 0) {
+                list.innerHTML = `<div style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">(No keys)</div>`;
+                return;
+            }
+
+            list.innerHTML = '';
+            apiKeys.forEach((k, index) => {
+                list.innerHTML += `
+                    <div style="display: grid; grid-template-columns: 2fr 3fr 1.5fr 1.5fr 1.5fr 1.5fr; padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; align-items: center;">
+                        <span style="font-weight: 600;">${k.name}</span>
+                        <span style="font-family: monospace; color: var(--text-muted);">${k.masked}</span>
+                        <span style="color: var(--text-muted);">${k.created}</span>
+                        <span style="color: var(--text-muted);">${k.lastUsed}</span>
+                        <span style="color: var(--text-muted);">${k.expires}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--text-muted);">${k.usage}</span>
+                            <button onclick="deleteKey(${index})" title="Delete" style="background:none; border:none; color: #ef4444; cursor:pointer; font-size:0.9rem;">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openCreateModal() { document.getElementById('create-modal').style.display = 'flex'; }
+        function closeCreateModal() { document.getElementById('create-modal').style.display = 'none'; }
+        
+        function generateKey() {
+            const name = document.getElementById('key-name-input').value.trim() || 'Production API Key';
+            const expires = document.getElementById('key-expiration').value;
+            
+            const randomHex = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+            const fullKey = 'gsk_' + randomHex.substring(0, 48);
+            const maskedKey = fullKey.substring(0, 6) + '...' + fullKey.substring(fullKey.length - 4);
+            
+            const now = new Date();
+            const dateStr = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+
+            apiKeys.push({
+                name: name,
+                secret: fullKey,
+                masked: maskedKey,
+                created: dateStr,
+                lastUsed: 'Never',
+                expires: expires === 'Never' ? 'Never' : expires,
+                usage: '0 API Calls'
+            });
+
+            localStorage.setItem('nebula_api_keys', JSON.stringify(apiKeys));
+            closeCreateModal();
+            document.getElementById('key-name-input').value = '';
+
+            document.getElementById('revealed-key-box').value = fullKey;
+            document.getElementById('success-modal').style.display = 'flex';
+            renderKeys();
+        }
+
+        function copyKeyValue() {
+            const copyText = document.getElementById('revealed-key-box');
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert('API Key copied to clipboard!');
+        }
+
+        function closeSuccessModal() { document.getElementById('success-modal').style.display = 'none'; }
+
+        function deleteKey(index) {
+            if (confirm('Delete this API key?')) {
+                apiKeys.splice(index, 1);
+                localStorage.setItem('nebula_api_keys', JSON.stringify(apiKeys));
+                renderKeys();
+            }
+        }
+
+        renderKeys();
+    </script>
+</body>
+</html>

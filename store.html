@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store — Nebula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo"><img src="nebula.png" alt="Nebula Logo"></a>
+        </div>
+        <nav class="nav-center">
+            <a href="index.html" class="nav-tab">Home</a>
+            <a href="bots.html" class="nav-tab">Bots</a>
+            <a href="tools.html" class="nav-tab">Tools</a>
+            <a href="hosting.html" class="nav-tab">Hosting</a>
+            <a href="store.html" class="nav-tab active">Store</a>
+            <a href="api-keys.html" class="nav-tab">API Keys</a>
+            <a href="dev.html" class="nav-tab">Developers</a>
+            <a href="discord.html" class="nav-tab">Discord</a>
+        </nav>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 12px;">
+            <select id="currency-selector" onchange="changeCurrency(this.value)" style="background: #07090e; color: white; border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem;">
+                <option value="USD">USD ($)</option>
+                <option value="INR">INR (₹)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+            </select>
+            <div id="nav-auth-buttons"></div>
+        </div>
+    </header>
+
+    <main style="max-width: 1100px; margin: 50px auto; padding: 0 24px;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800;">Nebula Store</h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 40px;">Unlock premium modules, deploy custom bots, bot upgrades, and high-performance server hosting tiers.</p>
+
+        <h2 style="font-size: 1.5rem; margin-bottom: 20px; font-weight: 700;">Bot Premium & Custom Bots</h2>
+        <div id="store-bots-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 50px;"></div>
+
+        <h2 style="font-size: 1.5rem; margin-bottom: 20px; font-weight: 700;">Cloud & VPS Server Plans</h2>
+        <div id="store-hosting-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;"></div>
+    </main>
+
+    <script>
+        let currentCurrency = localStorage.getItem('nebula_currency') || 'USD';
+        const supportServerUrl = "https://discord.gg/my9aENSaNy";
+
+        let storeData = {
+            site: {
+                currencyRates: { "USD": 1, "INR": 83, "EUR": 0.92, "GBP": 0.78 },
+                currencySymbols: { "USD": "$", "INR": "₹", "EUR": "€", "GBP": "£" }
+            },
+            bots: [
+                { title: "Nebula Ai", badge: "AI BOT", description: "Fully powered by AI and custom trained for your workflow and automated tasks.", premiumPrice: 2.30 },
+                { title: "Vedha", badge: "AUDIO & AMP", description: "Self-amplifier bot equipped with high-fidelity music streaming and audio management tools.", premiumPrice: 0.60 },
+                { title: "Ticket.in", badge: "SUPPORT", description: "Fully customisable advanced ticket system built for high-scale community support handling.", premiumPrice: 1.20 },
+                { title: "Nebula Core", badge: "CORE SYSTEM", description: "Core administrative backbone bot for tracking server analytics, moderation, and logs.", premiumPrice: 1.50 },
+                { title: "Custom Bot Service", badge: "CUSTOM", description: "Have your own custom bot built and tailored to your exact specifications. Join support to open a ticket.", premiumPrice: 5.00 }
+            ],
+            hosting: [
+                { title: "Starter Node", badge: "HOSTING PLAN", specs: "1 vCPU Core • 2GB RAM • 20GB NVMe", price: 3.50, purchaseUrl: "https://discord.gg/UKFHCvh8rn" },
+                { title: "Advanced Node", badge: "HOSTING PLAN", specs: "2 vCPU Cores • 4GB RAM • 50GB NVMe", price: 7.00, purchaseUrl: "https://discord.gg/UKFHCvh8rn" },
+                { title: "Pro Server", badge: "HOSTING PLAN", specs: "4 vCPU Cores • 8GB RAM • 100GB NVMe", price: 14.00, purchaseUrl: "https://discord.gg/UKFHCvh8rn" },
+                { title: "Extreme Server", badge: "HOSTING PLAN", specs: "6 vCPU Cores • 16GB RAM • 200GB NVMe", price: 22.00, purchaseUrl: "https://discord.gg/UKFHCvh8rn" }
+            ]
+        };
+
+        async function initStore() {
+            try {
+                const response = await fetch('data.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.site) storeData.site = data.site;
+                    if (data.bots) storeData.bots = data.bots;
+                    if (data.hosting) storeData.hosting = data.hosting;
+                }
+            } catch (err) {
+                console.warn("Using fallback embedded data configuration.");
+            }
+
+            document.getElementById('currency-selector').value = currentCurrency;
+            renderStore();
+            
+            const session = JSON.parse(localStorage.getItem('nebula_session'));
+            const authContainer = document.getElementById('nav-auth-buttons');
+            if (authContainer) {
+                authContainer.innerHTML = session ? 
+                    `<button onclick="localStorage.removeItem('nebula_session'); window.location.reload();" class="btn-outline" style="font-size:0.85rem; padding:6px 14px;">Logout</button>` :
+                    `<a href="index.html" class="btn-green" style="font-size:0.85rem; padding:6px 14px; text-decoration:none;">Login / Register</a>`;
+            }
+        }
+
+        function changeCurrency(val) {
+            currentCurrency = val;
+            localStorage.setItem('nebula_currency', val);
+            renderStore();
+        }
+
+        function formatPrice(usdPrice) {
+            const rate = storeData.site.currencyRates[currentCurrency] || 1;
+            const symbol = storeData.site.currencySymbols[currentCurrency] || '$';
+            return `${symbol}${(usdPrice * rate).toFixed(2)}`;
+        }
+
+        function renderStore() {
+            const botGrid = document.getElementById('store-bots-grid');
+            const hostingGrid = document.getElementById('store-hosting-grid');
+            if (!botGrid || !hostingGrid) return;
+
+            botGrid.innerHTML = '';
+            hostingGrid.innerHTML = '';
+
+            storeData.bots.forEach(bot => {
+                botGrid.innerHTML += `
+                    <div class="card" style="padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span class="card-badge">${bot.badge}</span>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${bot.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px; line-height: 1.5;">${bot.description}</p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                            <span style="font-weight: 700; color: var(--accent-green); font-size: 1.05rem;">${formatPrice(bot.premiumPrice)} /mo</span>
+                            <a href="${supportServerUrl}" target="_blank" rel="noopener noreferrer" class="btn-green" style="font-size: 0.85rem; padding: 8px 16px; text-decoration:none;">Buy / Ticket</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            storeData.hosting.forEach(node => {
+                const targetUrl = node.purchaseUrl || "https://discord.gg/UKFHCvh8rn";
+                hostingGrid.innerHTML += `
+                    <div class="card" style="padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span class="card-badge">${node.badge}</span>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${node.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px; line-height: 1.5;">${node.specs}</p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                            <span style="font-weight: 700; color: var(--accent-green); font-size: 1.05rem;">${formatPrice(node.price)} /mo</span>
+                            <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn-green" style="font-size: 0.85rem; padding: 8px 16px; text-decoration:none;">Deploy Plan</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        initStore();
+    </script>
+</body>
+</html>
